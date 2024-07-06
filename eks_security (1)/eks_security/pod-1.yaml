@@ -1,0 +1,33 @@
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: nginx-dev
+ spec:
+   replicas: 1
+   selector:
+     matchLabels:
+       app: dev
+   template:
+     metadata:
+       labels:
+         app: dev
+     spec:
+       containers:
+       - name: nginx-pod
+         image: 701697209736.dkr.ecr.ap-south-1.amazonaws.com/nginx
+       
+         ports:
+         - containerPort: 80
+       imagePullSecrets:
+        - name: ecr-secret  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devsvc
+spec:
+  selector:
+   app: dev
+  ports:
+  - port: 80
+    targetPort: 80

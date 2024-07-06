@@ -1,0 +1,34 @@
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: nginx-test
+ spec:
+   replicas: 1
+   selector:
+     matchLabels:
+       app: test
+   template:
+     metadata:
+       labels:
+         app: test
+     spec:
+       containers:
+       - name: nginx-pod
+         image: 701697209736.dkr.ecr.ap-south-1.amazonaws.com/nginx
+         command: ["/bin/sh"]
+         args: ["-c", "echo 'I am test page' > /usr/share/nginx/html/index.html "]
+         ports:
+         - containerPort: 80
+       imagePullSecrets:
+         - name: ecr-secret  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testsvc
+spec:
+  selector:
+   app: test
+  ports:
+  - port: 80
+    targetPort: 80
