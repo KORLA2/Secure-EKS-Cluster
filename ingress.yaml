@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: default
+  annotations:
+     nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - devops.goutham.wuaze.com
+    secretName: nginx-app-tls
+  defaultBackend:
+    service:
+      name: defaultservice
+      port:
+        number: 80
+  rules:
+    - host:  devops.goutham.wuaze.com
+      http: 
+        paths:
+          - path: /dev
+            pathType: Prefix
+            backend:
+              service:
+                name: devsvc
+                port:
+                  number: 80
+          - path: /test
+            pathType: Prefix
+            backend:
+              service:
+                name: testsvc
+                port:
+                  number: 80
+        
+
+
